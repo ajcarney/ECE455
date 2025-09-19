@@ -1,5 +1,5 @@
-hello_threads.cpp: In function ‘void hello(int, int)’:
-hello_threads.cpp:6:70: warning: unknown escape sequence: '\040'
-     std :: cout << " Hello from thread " << id << " of " << total << " \ n " ;
-                                                                      ^~~~~~~
- Hello from thread 0 of 5  n  Hello from thread 1 of 5  n  Hello from thread 2 of 5  n  Hello from thread 4 of 5  n  Hello from thread 3 of 5  n 
+Hello from thread 0 of 5
+Hello from thread 1 of 5
+Hello from thread 2 of 5
+Hello from thread 3 of 5
+Hello from thread 4 of 5
