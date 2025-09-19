@@ -31,6 +31,11 @@ int main() {
 
     for (auto& x : A) x = dist(rng);
     for (auto& x : B) x = dist(rng);
+    
+    // Baseline ( single - threaded )
+    auto t0 = std::chrono::high_resolution_clock::now();
+    multiply_block(std::cref(A), std::cref(B), std::ref(C), N, 0, N);
+    auto t1 = std::chrono::high_resolution_clock::now();
 
     std::vector<std::thread> threads;
     int chunk = N / T;
@@ -49,6 +54,9 @@ int main() {
         th.join();
 
     auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Baseline multiplication took "
+              << std::chrono::duration<double>(t1 - t0).count()
+              << " s\n";
     std::cout << "Parallel multiplication took "
               << std::chrono::duration<double>(end_time - start_time).count()
               << " s\n";
