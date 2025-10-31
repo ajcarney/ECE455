@@ -2,29 +2,37 @@
 #include <cstdio>
 
 int main() {
-  tf::Executor executor;
-  tf::Taskflow taskflow("Condition Task Demo");
 
-  int counter = 0;
-  const int limit = 5;
+    tf::Executor executor;
+    tf::Taskflow taskflow("Condition Task Demo");
 
-  auto init = taskflow.emplace([&]() {
-    printf("Initialize counter = %d\n", counter);
-  });
+    int counter = 0;
+    const int limit = 5;
 
-  auto loop = taskflow.emplace([&]() {
-    printf("Loop iteration %d\n", counter);
-    counter++;
-    return (counter < limit) ? 0 : 1;  // 0 => go back, 1 => exit
-  }).condition();
+    // Initialize counter
+    auto init = taskflow.emplace([&]() {
+        printf("Initialize counter = %d\n", counter);
+    });
 
-  auto done = taskflow.emplace([]() {
-    printf("Loop done.\n");
-  });
+    // Loop task with condition
+    auto loop = taskflow.emplace([&]() -> int {
+        printf("Loop iteration %d\n", counter);
+        counter++;
+        return (counter < limit) ? 0 : 1;  // 0 => go back, 1 => exit
+    }).name("cond");
 
-  init.precede(loop);
-  loop.precede(loop, done);  // self-edge enables iteration
+    // Done task
+    auto done = taskflow.emplace([]() {
+        printf("Loop done.\n");
+    });
 
-  executor.run(taskflow).wait();
+    // Define dependencies
+    init.precede(loop);
+    loop.precede(loop, done);  // self-edge enables iteration
+
+    // Run taskflow
+    executor.run(taskflow).wait();
+
+    return 0;
 }
 
