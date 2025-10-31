@@ -6,6 +6,5 @@
 #SBATCH --output=condition_task.output
 
 cd $SLURM_SUBMIT_DIR
-module load gcc
-g++ -std=c++20 condition_task.cpp -o condition_task -I path/to/taskflow -pthread
+g++-14 -std=c++20 condition_task.cpp -o condition_task -I ~/ECE455/HW08/ -pthread
 ./condition_task
